@@ -1,0 +1,14 @@
+# relay_jacks
+
+A KiCad pcb project for jacks controlled by relay.
+
+# Components
+
+- [Relay](http://akizukidenshi.com/catalog/g/gP-01346/)
+- [Mosfet](http://akizukidenshi.com/catalog/g/gI-04256/)
+- [Diode](http://akizukidenshi.com/catalog/g/gI-06467/)
+- [Resistor 1k](http://akizukidenshi.com/catalog/g/gR-06102/)
+- [3.5mm audio jack](http://akizukidenshi.com/catalog/g/gC-02460/)
+- [LED Green](http://akizukidenshi.com/catalog/g/gI-06417/)
+- [LED Yellow](http://akizukidenshi.com/catalog/g/gI-03984/)
+- [LED Red](http://akizukidenshi.com/catalog/g/gI-03978/)
