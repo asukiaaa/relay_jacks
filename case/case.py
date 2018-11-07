@@ -2,12 +2,13 @@ import cadquery as cq
 from Helpers import show
 
 clealance = 0.2
-holeClealance = 0.5
+narrowClearance = clealance / 2
+holeClealance = 0.7
 relaysPcbNumber = 3
-relaysPcbWidth = 30.0
-relaysPcbLength = 35.5
+relaysPcbWidth = 30.5
+relaysPcbLength = 36.0
 relaysPcbThickness = 1.6
-relaysPcbHolePositions = ((-5.1, 2.55), (5.3, 2.55))
+relaysPcbHolePositions = ((-5.2, 3.5), (5.2, 3.5))
 relaysPcbAudioXPositions = (-10.2, 0, 10.2)
 relaysPcbHoleCenterHeight = 2.0
 audioHoleCenterHeight = 2.55
@@ -23,7 +24,7 @@ proMicroHolderCoverLength = 2.6
 mountingHoleHeight = 2.0
 mountingHoleRadius = 2.3 / 2
 mountSupporerThickness = 1.0
-boxThickness = 1.5
+boxThickness = 1.0
 boxFillet = 1.5
 boxInnerWidth = (relaysPcbWidth + clealance) * relaysPcbNumber + clealance \
     + proMicroThickness + proMicroUSBHeight \
@@ -85,7 +86,8 @@ usbHole = cq.Workplane('XY').box(usbHoleWidth,
                                  boxThickness,
                                  usbBodyHoleHeight)
 body.cut(usbHole.translate((
-    boxInnerWidth - proMicroThickness - clealance - usbHoleHeight / 2,
+    boxInnerWidth - proMicroThickness - clealance -
+    mountSupporerThickness - usbHoleWidth / 2,
     boxInnerLength + boxThickness / 2,
     boxInnerHeight - usbBodyHoleHeight / 2)))
 
@@ -105,16 +107,17 @@ proMicroHolderYInnerX = proMicroHolderYOuterX \
     - clealance * 2 - proMicroThickness - proMicroHolderThickness
 proMicroHolderYUpperY = boxInnerLength - proMicroHolderCoverLength / 2
 proMicroHolderYLowerY = \
-    boxInnerLength - proMicroLength + proMicroHolderCoverLength / 2
+    boxInnerLength - proMicroLength - narrowClearance * 2 + \
+    proMicroHolderCoverLength / 2
 
 body = body.union(proMicroHolderLowY.translate((
     proMicroHolderYInnerX,
     proMicroHolderYUpperY,
     proMicroHolderLowHeight / 2)))
-body = body.union(proMicroHolderLowY.translate((
+body = body.union(proMicroHolderHighY.translate((
     proMicroHolderYOuterX,
     proMicroHolderYUpperY,
-    proMicroHolderLowHeight / 2)))
+    boxInnerHeight / 2)))
 body = body.union(proMicroHolderHighY.translate((
     proMicroHolderYInnerX,
     proMicroHolderYLowerY,
@@ -125,7 +128,8 @@ body = body.union(proMicroHolderHighY.translate((
     boxInnerHeight / 2)))
 body = body.union(proMicroHolderX.translate((
     boxInnerWidth - proMicroHolderXWidth / 2,
-    boxInnerLength - proMicroLength - proMicroHolderThickness / 2,
+    boxInnerLength - proMicroLength - narrowClearance * 2 -
+    proMicroHolderThickness / 2,
     boxInnerHeight / 2)))
 
 testZoneWidth = boxOuterWidth * 2 / 3
