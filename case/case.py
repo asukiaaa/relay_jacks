@@ -21,12 +21,14 @@ proMicroUSBWidth = 7.5
 proMicroHolderThickness = 1.0
 proMicroHolderLowHeight = 4.0
 proMicroHolderCoverLength = 2.6
-mountingHoleHeight = 2.0
+relaysPcbToUsbClealance = 2.0
+wireRadius = 3.0 / 2
+mountingHoleHeight = 3.5
 mountingHoleRadius = 2.3 / 2
 mountSupporerThickness = 1.0
 boxThickness = 1.0
-boxFillet = 1.5
 boxInnerWidth = (relaysPcbWidth + clealance) * relaysPcbNumber + clealance \
+    + relaysPcbToUsbClealance \
     + proMicroThickness + proMicroUSBHeight \
     + proMicroHolderThickness * 2 + clealance * 2
 boxInnerLength = relaysPcbLength + clealance * 2
@@ -50,7 +52,7 @@ mountSupporterY = cq.Workplane("XY").box(mountSupporerThickness,
                                          boxInnerLength * 2 / 3,
                                          mountingHoleHeight)
 mountSupporterXWidth = boxInnerWidth - proMicroThickness - proMicroUSBHeight \
-    - clealance * 2
+    - clealance * 2 - relaysPcbToUsbClealance
 mountSuporterX = cq.Workplane("XY").box(mountSupporterXWidth,
                                         mountSupporerThickness,
                                         mountingHoleHeight)
@@ -82,12 +84,13 @@ usbHoleWidth = proMicroUSBHeight + holeClealance * 2
 usbHoleHeight = proMicroUSBWidth + holeClealance * 2
 usbHoleBottomZ = (boxInnerHeight - usbHoleHeight) / 2
 usbBodyHoleHeight = boxInnerHeight - usbHoleBottomZ
+usbHoleCenterX = boxInnerWidth - proMicroThickness - clealance - \
+    mountSupporerThickness - usbHoleWidth / 2
 usbHole = cq.Workplane('XY').box(usbHoleWidth,
                                  boxThickness,
                                  usbBodyHoleHeight)
 body.cut(usbHole.translate((
-    boxInnerWidth - proMicroThickness - clealance -
-    mountSupporerThickness - usbHoleWidth / 2,
+    usbHoleCenterX,
     boxInnerLength + boxThickness / 2,
     boxInnerHeight - usbBodyHoleHeight / 2)))
 
@@ -131,6 +134,16 @@ body = body.union(proMicroHolderX.translate((
     boxInnerLength - proMicroLength - narrowClearance * 2 -
     proMicroHolderThickness / 2,
     boxInnerHeight / 2)))
+
+wireHoleWidth = (wireRadius + narrowClearance) * 2
+wireHole = cq.Workplane('XY') \
+    .box(wireHoleWidth, boxThickness, usbHoleBottomZ) \
+    .faces('<Z').edges('|Y').fillet(wireRadius) \
+    .translate((proMicroHolderYInnerX - proMicroHolderThickness / 2 -
+                wireHoleWidth / 2,
+                boxInnerLength + boxThickness / 2,
+                usbHoleBottomZ / 2))
+body.cut(wireHole)
 
 testZoneWidth = boxOuterWidth * 2 / 3
 testZoneLength = boxOuterLength
