@@ -45,6 +45,11 @@ boxInnerHeight = proMicroWidth + clealance * 2
 boxOuterWidth = boxInnerWidth + boxThickness * 2
 boxOuterLength = boxInnerLength + boxThickness * 2
 boxOuterHeight = boxInnerHeight + boxThickness * 2
+wireFixPillowRadius = 3.0 / 2
+wireFixPollowHeight = wireRadius * 3
+wireFixPillowPositions = ((boxInnerWidth - 3.0, boxInnerLength),
+                          (boxInnerWidth - 6.0, boxInnerLength - 6.0),
+                          (boxInnerWidth - 3.0, boxInnerLength - 12.0))
 
 # body = cq.Workplane("XY") \
 #     .box(boxInnerWidth, boxInnerLength, boxInnerHeight) \
@@ -185,6 +190,11 @@ wireHole = cq.Workplane('XY') \
                 boxInnerLength + boxThickness / 2,
                 usbHoleBottomZ / 2))
 body.cut(wireHole)
+
+wireFixPillow = cq.Workplane('XY').circle(wireFixPillowRadius) \
+    .extrude(wireFixPollowHeight)
+for (x, y) in wireFixPillowPositions:
+    body = body.union(wireFixPillow.translate((x, y, 0)))
 
 # testZoneWidth = boxOuterWidth * 2 / 3
 # testZoneLength = boxOuterLength
