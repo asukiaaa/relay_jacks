@@ -34,6 +34,7 @@ coverMountHoleRadius = 2.8 / 2
 coverMountHoleCenterHeight = coverMountHoleRadius * 2
 coverMountHoleLength = 10.0
 coverMountThickness = 1.0
+coverHoleRadius = coverMountHoleRadius + 0.3
 boxThickness = 1.5
 boxInnerWidth = (relaysPcbWidth + relayPcbToPcbClearance) * relaysPcbNumber \
     - relayPcbToPcbClearance + clealance * 2 \
@@ -46,17 +47,20 @@ boxOuterWidth = boxInnerWidth + boxThickness * 2
 boxOuterLength = boxInnerLength + boxThickness * 2
 boxOuterHeight = boxInnerHeight + boxThickness * 2
 wireFixPillowRadius = 3.0 / 2
-wireFixPollowHeight = wireRadius * 3
-wireFixPillowPositions = ((boxInnerWidth - 3.0, boxInnerLength),
-                          (boxInnerWidth - 6.0, boxInnerLength - 6.0),
-                          (boxInnerWidth - 3.0, boxInnerLength - 12.0))
+wireFixPillowHeight = wireRadius * 3
+wireFixPillowX = boxInnerWidth - 8.5
 
-# body = cq.Workplane("XY") \
-#     .box(boxInnerWidth, boxInnerLength, boxInnerHeight) \
-#     .faces(">Z").shell(boxThickness) \
-#     .translate((boxInnerWidth / 2,
-#                 boxInnerLength / 2,
-#                 boxInnerHeight / 2))
+cutCover = cq.Workplane('XY') \
+    .box(boxInnerWidth, boxInnerLength, boxInnerHeight) \
+    .translate((boxInnerWidth / 2, boxInnerLength / 2, boxInnerHeight / 2))
+cover = cq.Workplane('XY').box(boxInnerWidth - clealance * 2,
+                               boxInnerLength + boxThickness - clealance,
+                               boxInnerHeight + boxThickness - clealance) \
+    .edges('<Y and >Z').fillet(boxThickness) \
+    .translate((boxInnerWidth / 2,
+                (boxInnerLength - boxThickness - clealance) / 2,
+                (boxInnerHeight + boxThickness + clealance) / 2)) \
+    .cut(cutCover)
 
 cutBox = cq.Workplane("XY") \
     .box(boxInnerWidth, boxOuterLength, boxOuterHeight)
@@ -87,14 +91,20 @@ body = body.union(mountSuporterX.translate((mountSupporterXWidth / 2,
                                             relaysPcbHolePositions[0][1],
                                             mountingHoleHeight / 2)))
 hookHoleHeight = hookHeight + clealance * 2
-hookHole = cq.Workplane("XY").box(hookWidth + clealance * 2,
-                                  boxThickness,
-                                  hookHoleHeight)
+hookHole = cq.Workplane("XY") \
+    .box(hookWidth + clealance * 2, boxThickness, hookHoleHeight)
+hookHoleCenterZ = boxInnerHeight - hookHoleHeight / 2
+hookLength = boxThickness + hookConnectionLength + clealance
+hook = cq.Workplane('XY').box(hookWidth, hookLength, hookHeight)
+hookSupport = cq.Workplane('XY') \
+    .box(hookWidth, hookConnectionLength, boxInnerHeight - hookHoleCenterZ)
 coverMountHoleBase = cq.Workplane("XZ") \
     .circle(coverMountHoleRadius + coverMountThickness) \
     .extrude(coverMountHoleLength)
 coverMountHole = cq.Workplane("XZ").circle(coverMountHoleRadius) \
     .extrude(coverMountHoleLength)
+coverHole = cq.Workplane('XZ').circle(coverHoleRadius) \
+    .extrude(-boxThickness)
 
 for i in range(0, relaysPcbNumber):
     pcbCenterX = (relaysPcbWidth + relayPcbToPcbClearance) * i \
@@ -112,7 +122,7 @@ for i in range(0, relaysPcbNumber):
         if (x > 0):
             body.cut(hookHole.translate((pcbCenterX + x,
                                          boxInnerLength + boxThickness / 2,
-                                         boxInnerHeight - hookHoleHeight / 2)))
+                                         hookHoleCenterZ)))
             body = body.union(coverMountHoleBase.translate((
                 pcbCenterX + x,
                 coverMountHoleLength,
@@ -121,6 +131,18 @@ for i in range(0, relaysPcbNumber):
                 pcbCenterX + x,
                 coverMountHoleLength,
                 coverMountHoleCenterHeight)))
+            cover.cut(coverHole.translate((
+                pcbCenterX + x,
+                - boxThickness,
+                coverMountHoleCenterHeight)))
+            cover = cover.union(hookSupport.translate((
+                pcbCenterX + x,
+                boxInnerLength - clealance - hookConnectionLength / 2,
+                hookHoleCenterZ + hookHeight / 2)))
+            cover = cover.union(hook.translate((
+                pcbCenterX + x,
+                boxInnerLength + boxThickness - hookLength / 2,
+                hookHoleCenterZ)))
     for x in relaysPcbAudioXPositions:
         body.cut(audioHole.translate((
             pcbCenterX + x,
@@ -150,6 +172,10 @@ proMicroHolderXWidth = \
     proMicroThickness + proMicroHolderThickness * 2 + clealance * 2
 proMicroHolderX = cq.Workplane("XY") \
     .box(proMicroHolderXWidth, proMicroHolderThickness, boxInnerHeight)
+proMicroHolderXCut = cq.Workplane("XY") \
+    .box(proMicroHolderXWidth + clealance * 2,
+         proMicroHolderThickness + clealance * 2,
+         boxInnerHeight + clealance * 2)
 
 proMicroHolderYOuterX = boxInnerWidth - proMicroHolderThickness / 2
 proMicroHolderYInnerX = proMicroHolderYOuterX \
@@ -175,11 +201,13 @@ body = body.union(proMicroHolderHighY.translate((
     proMicroHolderYOuterX,
     proMicroHolderYLowerY,
     boxInnerHeight / 2)))
-body = body.union(proMicroHolderX.translate((
+holderXPosition = (
     boxInnerWidth - proMicroHolderXWidth / 2,
     boxInnerLength - proMicroLength - narrowClearance * 2 -
     proMicroHolderThickness / 2,
-    boxInnerHeight / 2)))
+    boxInnerHeight / 2)
+body = body.union(proMicroHolderX.translate(holderXPosition))
+cover.cut(proMicroHolderXCut.translate(holderXPosition))
 
 wireHoleWidth = (wireRadius + narrowClearance) * 2
 wireHole = cq.Workplane('XY') \
@@ -192,9 +220,13 @@ wireHole = cq.Workplane('XY') \
 body.cut(wireHole)
 
 wireFixPillow = cq.Workplane('XY').circle(wireFixPillowRadius) \
-    .extrude(wireFixPollowHeight)
-for (x, y) in wireFixPillowPositions:
-    body = body.union(wireFixPillow.translate((x, y, 0)))
+    .extrude(wireFixPillowHeight)
+for i in range(0, 3):
+    body = body.union(wireFixPillow.translate((
+        wireFixPillowX,
+        boxInnerLength - wireFixPillowRadius -
+        (wireFixPillowRadius + wireRadius) * 2 * i,
+        0)))
 
 # testZoneWidth = boxOuterWidth * 2 / 3
 # testZoneLength = boxOuterLength
@@ -207,3 +239,4 @@ for (x, y) in wireFixPillowPositions:
 # body = body.cut(testZone)
 
 show(body)
+show(cover)
