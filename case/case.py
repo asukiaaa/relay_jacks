@@ -1,9 +1,9 @@
 import cadquery as cq
 from Helpers import show
 
-clealance = 0.2
-narrowClearance = clealance / 2
-holeClealance = 0.5
+clearance = 0.2
+narrowClearance = clearance / 2
+holeClearance = 0.5
 relaysPcbNumber = 3
 relaysPcbWidth = 32.0
 relaysPcbLength = 33.0
@@ -22,7 +22,7 @@ proMicroUSBWidth = 7.5
 proMicroHolderThickness = 1.0
 proMicroHolderLowHeight = 4.0
 proMicroHolderCoverLength = 2.6
-relaysPcbToUsbClealance = 2.0
+relaysPcbToUsbClearance = 2.0
 wireRadius = 3.0 / 2
 mountingHoleHeight = 10.5
 mountingHoleRadius = 2.3 / 2
@@ -37,12 +37,12 @@ coverMountThickness = 1.0
 coverHoleRadius = coverMountHoleRadius + 0.3
 boxThickness = 1.5
 boxInnerWidth = (relaysPcbWidth + relayPcbToPcbClearance) * relaysPcbNumber \
-    - relayPcbToPcbClearance + clealance * 2 \
-    + relaysPcbToUsbClealance \
+    - relayPcbToPcbClearance + clearance * 2 \
+    + relaysPcbToUsbClearance \
     + proMicroThickness + proMicroUSBHeight \
-    + proMicroHolderThickness * 2 + clealance * 2
-boxInnerLength = relaysPcbLength + clealance * 2
-boxInnerHeight = proMicroWidth + clealance * 2
+    + proMicroHolderThickness * 2 + clearance * 2
+boxInnerLength = relaysPcbLength + clearance * 2
+boxInnerHeight = proMicroWidth + clearance * 2
 boxOuterWidth = boxInnerWidth + boxThickness * 2
 boxOuterLength = boxInnerLength + boxThickness * 2
 boxOuterHeight = boxInnerHeight + boxThickness * 2
@@ -82,20 +82,20 @@ mountSupporterY = cq.Workplane("XY").box(mountSupporerThickness,
                                          boxInnerLength,
                                          mountingHoleHeight)
 mountSupporterXWidth = boxInnerWidth - proMicroThickness - proMicroUSBHeight \
-    - clealance * 2 - relaysPcbToUsbClealance
+    - clearance * 2 - relaysPcbToUsbClearance
 mountSuporterX = cq.Workplane("XY").box(mountSupporterXWidth,
                                         mountSupporerThickness,
                                         mountingHoleHeight)
-pcbCenterY = clealance + relaysPcbLength / 2
+pcbCenterY = clearance + relaysPcbLength / 2
 body = body.union(mountSuporterX.translate((mountSupporterXWidth / 2,
                                             pcbCenterY +
                                             relaysPcbHolePositions[0][1],
                                             mountingHoleHeight / 2)))
-hookHoleHeight = hookHeight + clealance * 2
+hookHoleHeight = hookHeight + clearance * 2
 hookHole = cq.Workplane("XY") \
-    .box(hookWidth + clealance * 2, boxThickness, hookHoleHeight)
+    .box(hookWidth + clearance * 2, boxThickness, hookHoleHeight)
 hookHoleCenterZ = boxInnerHeight - hookHoleHeight / 2
-hookLength = boxThickness + hookConnectionLength + clealance
+hookLength = boxThickness + hookConnectionLength + clearance
 hook = cq.Workplane('XY').box(hookWidth, hookLength, hookHeight)
 hookSupport = cq.Workplane('XY') \
     .box(hookWidth, hookConnectionLength, boxInnerHeight - hookHoleCenterZ)
@@ -109,7 +109,7 @@ coverHole = cq.Workplane('XZ').circle(coverHoleRadius) \
 
 for i in range(0, relaysPcbNumber):
     pcbCenterX = (relaysPcbWidth + relayPcbToPcbClearance) * i \
-        + clealance + relaysPcbWidth / 2
+        + clearance + relaysPcbWidth / 2
     for (x, y) in relaysPcbHolePositions:
         body = body.union(moutingHoleBase.translate((pcbCenterX + x,
                                                      pcbCenterY + y,
@@ -138,7 +138,7 @@ for i in range(0, relaysPcbNumber):
                 coverMountHoleCenterHeight)))
             cover = cover.union(hookSupport.translate((
                 pcbCenterX + x,
-                boxInnerLength - clealance - hookConnectionLength / 2,
+                boxInnerLength - clearance - hookConnectionLength / 2,
                 hookHoleCenterZ + hookHeight / 2)))
             cover = cover.union(hook.translate((
                 pcbCenterX + x,
@@ -149,8 +149,8 @@ for i in range(0, relaysPcbNumber):
             pcbCenterX + x,
             boxInnerLength + boxThickness,
             mountingHoleHeight - audioHoleCenterHeight)))
-usbHoleWidth = proMicroUSBHeight + clealance * 2
-usbHoleHeight = proMicroUSBWidth + holeClealance * 2
+usbHoleWidth = proMicroUSBHeight + clearance * 2
+usbHoleHeight = proMicroUSBWidth + holeClearance * 2
 usbHoleBottomZ = (boxInnerHeight - usbHoleHeight) / 2
 usbBodyHoleHeight = boxInnerHeight - usbHoleBottomZ + boxThickness
 usbHoleCenterX = boxInnerWidth - proMicroThickness - narrowClearance - \
@@ -170,17 +170,17 @@ proMicroHolderHighY = cq.Workplane("XY").box(proMicroHolderThickness,
                                              proMicroHolderCoverLength,
                                              boxInnerHeight)
 proMicroHolderXWidth = \
-    proMicroThickness + proMicroHolderThickness * 2 + clealance * 2
+    proMicroThickness + proMicroHolderThickness * 2 + clearance * 2
 proMicroHolderX = cq.Workplane("XY") \
     .box(proMicroHolderXWidth, proMicroHolderThickness, boxInnerHeight)
 proMicroHolderXCut = cq.Workplane("XY") \
-    .box(proMicroHolderXWidth + clealance * 2,
-         proMicroHolderThickness + clealance * 2,
-         boxInnerHeight + clealance * 2)
+    .box(proMicroHolderXWidth + clearance * 2,
+         proMicroHolderThickness + clearance * 2,
+         boxInnerHeight + clearance * 2)
 
 proMicroHolderYOuterX = boxInnerWidth - proMicroHolderThickness / 2
 proMicroHolderYInnerX = proMicroHolderYOuterX \
-    - clealance * 2 - proMicroThickness - proMicroHolderThickness
+    - clearance * 2 - proMicroThickness - proMicroHolderThickness
 proMicroHolderYUpperY = boxInnerLength - proMicroHolderCoverLength / 2
 proMicroHolderYLowerY = \
     boxInnerLength - proMicroLength - narrowClearance * 2 + \
