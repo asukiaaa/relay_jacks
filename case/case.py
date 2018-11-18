@@ -53,13 +53,14 @@ wireFixPillowX = boxInnerWidth - 8.5
 cutCover = cq.Workplane('XY') \
     .box(boxInnerWidth, boxInnerLength, boxInnerHeight) \
     .translate((boxInnerWidth / 2, boxInnerLength / 2, boxInnerHeight / 2))
-cover = cq.Workplane('XY').box(boxInnerWidth - clealance * 2,
-                               boxInnerLength + boxThickness - clealance,
-                               boxInnerHeight + boxThickness - clealance) \
+cover = cq.Workplane('XY') \
+    .box(boxInnerWidth - narrowClearance * 2,
+         boxInnerLength + boxThickness - narrowClearance,
+         boxInnerHeight + boxThickness - narrowClearance) \
     .edges('<Y and >Z').fillet(boxThickness) \
     .translate((boxInnerWidth / 2,
-                (boxInnerLength - boxThickness - clealance) / 2,
-                (boxInnerHeight + boxThickness + clealance) / 2)) \
+                (boxInnerLength - boxThickness - narrowClearance) / 2,
+                (boxInnerHeight + boxThickness + narrowClearance) / 2)) \
     .cut(cutCover)
 
 cutBox = cq.Workplane("XY") \
@@ -148,7 +149,7 @@ for i in range(0, relaysPcbNumber):
             pcbCenterX + x,
             boxInnerLength + boxThickness,
             mountingHoleHeight - audioHoleCenterHeight)))
-usbHoleWidth = proMicroUSBHeight + holeClealance * 2
+usbHoleWidth = proMicroUSBHeight + clealance * 2
 usbHoleHeight = proMicroUSBWidth + holeClealance * 2
 usbHoleBottomZ = (boxInnerHeight - usbHoleHeight) / 2
 usbBodyHoleHeight = boxInnerHeight - usbHoleBottomZ + boxThickness
