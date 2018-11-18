@@ -31,7 +31,7 @@ hookWidth = 4.0
 hookHeight = 1.5
 hookConnectionLength = 1.5
 coverMountHoleRadius = 2.8 / 2
-coverMountHoleCenterHeight = coverMountHoleRadius * 2
+coverMountHoleCenterHeight = coverMountHoleRadius * 4
 coverMountHoleLength = 10.0
 coverMountThickness = 1.0
 coverHoleRadius = coverMountHoleRadius + 0.3
@@ -120,7 +120,7 @@ for i in range(0, relaysPcbNumber):
         body.cut(moutingHole.translate((pcbCenterX + x,
                                         pcbCenterY + y,
                                         - boxThickness)))
-        if (x > 0):
+        if (x > 0 and (i == 0 or i == relaysPcbNumber - 1)):
             body.cut(hookHole.translate((pcbCenterX + x,
                                          boxInnerLength + boxThickness / 2,
                                          hookHoleCenterZ)))
@@ -228,6 +228,9 @@ for i in range(0, 3):
         boxInnerLength - wireFixPillowRadius -
         (wireFixPillowRadius + wireRadius) * 2 * i,
         0)))
+
+cover = cover.faces('<Y').edges('not(|X or |Y or |Z)') \
+    .chamfer(boxThickness * 0.9)
 
 testZoneWidth = boxOuterWidth * 2 / 3
 testZoneLength = boxOuterLength
