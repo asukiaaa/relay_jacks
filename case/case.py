@@ -153,7 +153,7 @@ usbHoleWidth = proMicroUSBHeight + clearance * 2
 usbHoleHeight = proMicroUSBWidth + holeClearance * 2
 usbHoleBottomZ = (boxInnerHeight - usbHoleHeight) / 2
 usbBodyHoleHeight = boxInnerHeight - usbHoleBottomZ + boxThickness
-usbHoleCenterX = boxInnerWidth - proMicroThickness - narrowClearance - \
+usbHoleCenterX = boxInnerWidth - proMicroThickness - \
     mountSupporerThickness - usbHoleWidth / 2
 usbHole = cq.Workplane('XY').box(usbHoleWidth,
                                  boxThickness,
