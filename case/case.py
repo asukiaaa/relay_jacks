@@ -177,6 +177,12 @@ proMicroHolderXCut = cq.Workplane("XY") \
     .box(proMicroHolderXWidth + clearance * 2,
          proMicroHolderThickness + clearance * 2,
          boxInnerHeight + clearance * 2)
+proMicroHolderAsOuterX = cq.Workplane('XY') \
+    .box(proMicroHolderXWidth, boxThickness, boxInnerHeight)
+proMicroHolderAsOuterXCut = cq.Workplane('XY') \
+    .box(proMicroHolderXWidth + clearance * 2,
+         boxThickness,
+         boxInnerHeight + clearance * 2)
 
 proMicroHolderYOuterX = boxInnerWidth - proMicroHolderThickness / 2
 proMicroHolderYInnerX = proMicroHolderYOuterX \
@@ -207,8 +213,14 @@ holderXPosition = (
     boxInnerLength - proMicroLength - narrowClearance * 2 -
     proMicroHolderThickness / 2,
     boxInnerHeight / 2)
+holderAsOuterXPosition = (
+    holderXPosition[0],
+    - boxThickness / 2,
+    holderXPosition[2])
 body = body.union(proMicroHolderX.translate(holderXPosition))
 cover.cut(proMicroHolderXCut.translate(holderXPosition))
+body = body.union(proMicroHolderAsOuterX.translate(holderAsOuterXPosition))
+cover.cut(proMicroHolderAsOuterXCut.translate(holderAsOuterXPosition))
 
 wireHoleWidth = (wireRadius + narrowClearance) * 2
 wireHole = cq.Workplane('XY') \
