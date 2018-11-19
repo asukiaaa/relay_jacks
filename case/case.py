@@ -232,6 +232,8 @@ wireHole = cq.Workplane('XY') \
                 usbHoleBottomZ / 2))
 body.cut(wireHole)
 
+body = body.faces('<Z[4]').edges('not(|X or >X)').chamfer(wireRadius / 2)
+
 wireFixPillow = cq.Workplane('XY').circle(wireFixPillowRadius) \
     .extrude(wireFixPillowHeight)
 for i in range(0, 3):
