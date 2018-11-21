@@ -91,7 +91,7 @@ body = body.union(mountSuporterX.translate((mountSupporterXWidth / 2,
                                             pcbCenterY +
                                             relaysPcbHolePositions[0][1],
                                             mountingHoleHeight / 2)))
-hookHoleHeight = hookHeight + clearance * 2
+hookHoleHeight = hookHeight + holeClearance * 2
 hookHole = cq.Workplane("XY") \
     .box(hookWidth + clearance * 2, boxThickness, hookHoleHeight)
 hookHoleCenterZ = boxInnerHeight - hookHoleHeight / 2
