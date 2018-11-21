@@ -186,7 +186,7 @@ proMicroHolderAsOuterXCut = cq.Workplane('XY') \
 
 proMicroHolderYOuterX = boxInnerWidth - proMicroHolderThickness / 2
 proMicroHolderYInnerX = proMicroHolderYOuterX \
-    - clearance * 2 - proMicroThickness - proMicroHolderThickness
+    - narrowClearance * 2 - proMicroThickness - proMicroHolderThickness
 proMicroHolderYUpperY = boxInnerLength - proMicroHolderCoverLength / 2
 proMicroHolderYLowerY = \
     boxInnerLength - proMicroLength - narrowClearance * 2 + \
@@ -232,7 +232,7 @@ wireHole = cq.Workplane('XY') \
                 usbHoleBottomZ / 2))
 body.cut(wireHole)
 
-body = body.faces('<Z[4]').edges('not(|X or >X)').chamfer(wireRadius / 2)
+# body = body.faces('<Z[4]').edges('not(|X or >X)').chamfer(wireRadius / 2)
 
 wireFixPillow = cq.Workplane('XY').circle(wireFixPillowRadius) \
     .extrude(wireFixPillowHeight)
