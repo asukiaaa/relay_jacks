@@ -55,11 +55,11 @@ cutCover = cq.Workplane('XY') \
     .translate((boxInnerWidth / 2, boxInnerLength / 2, boxInnerHeight / 2))
 cover = cq.Workplane('XY') \
     .box(boxInnerWidth - narrowClearance * 2,
-         boxInnerLength + boxThickness - narrowClearance,
+         boxInnerLength + boxThickness - clearance,
          boxInnerHeight + boxThickness - narrowClearance) \
     .edges('<Y and >Z').fillet(boxThickness) \
     .translate((boxInnerWidth / 2,
-                (boxInnerLength - boxThickness - narrowClearance) / 2,
+                (boxInnerLength - boxThickness - clearance) / 2,
                 (boxInnerHeight + boxThickness + narrowClearance) / 2)) \
     .cut(cutCover)
 
