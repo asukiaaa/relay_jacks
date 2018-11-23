@@ -33,6 +33,7 @@ hookConnectionLength = 1.5
 coverMountHoleRadius = 2.8 / 2
 coverMountHoleCenterHeight = coverMountHoleRadius * 4
 coverMountHoleLength = 10.0
+coverMountHoleBaseLength = 2.0
 coverMountThickness = 1.0
 coverHoleRadius = coverMountHoleRadius + 0.3
 boxThickness = 1.5
@@ -101,7 +102,7 @@ hookSupport = cq.Workplane('XY') \
     .box(hookWidth, hookConnectionLength, boxInnerHeight - hookHoleCenterZ)
 coverMountHoleBase = cq.Workplane("XZ") \
     .circle(coverMountHoleRadius + coverMountThickness) \
-    .extrude(coverMountHoleLength)
+    .extrude(coverMountHoleBaseLength)
 coverMountHole = cq.Workplane("XZ").circle(coverMountHoleRadius) \
     .extrude(coverMountHoleLength)
 coverHole = cq.Workplane('XZ').circle(coverHoleRadius) \
@@ -126,7 +127,7 @@ for i in range(0, relaysPcbNumber):
                                          hookHoleCenterZ)))
             body = body.union(coverMountHoleBase.translate((
                 pcbCenterX + x,
-                coverMountHoleLength,
+                coverMountHoleBaseLength,
                 coverMountHoleCenterHeight)))
             body.cut(coverMountHole.translate((
                 pcbCenterX + x,
