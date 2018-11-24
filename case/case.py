@@ -23,7 +23,7 @@ proMicroHolderThickness = 1.0
 proMicroHolderLowHeight = 4.0
 proMicroHolderCoverLength = 2.6
 relaysPcbToUsbClearance = 2.0
-wireRadius = 3.0 / 2
+sensorWireRadius = 3.0 / 2
 mountingHoleHeight = 10.5
 mountingHoleRadius = 1.8 / 2
 mountSupporerThickness = 1.0
@@ -47,9 +47,9 @@ boxInnerHeight = proMicroWidth + clearance * 2
 boxOuterWidth = boxInnerWidth + boxThickness * 2
 boxOuterLength = boxInnerLength + boxThickness * 2
 boxOuterHeight = boxInnerHeight + boxThickness * 2
-wireFixPillowRadius = 3.0 / 2
-wireFixPillowHeight = wireRadius * 3
-wireFixPillowX = boxInnerWidth - 8.5
+sensorWireFixPillowRadius = 3.0 / 2
+sensorWireFixPillowHeight = sensorWireRadius * 3
+sensorWireFixPillowX = boxInnerWidth - 8.5
 
 cutCover = cq.Workplane('XY') \
     .box(boxInnerWidth, boxInnerLength, boxInnerHeight) \
@@ -223,25 +223,25 @@ cover.cut(proMicroHolderXCut.translate(holderXPosition))
 body = body.union(proMicroHolderAsOuterX.translate(holderAsOuterXPosition))
 cover.cut(proMicroHolderAsOuterXCut.translate(holderAsOuterXPosition))
 
-wireHoleWidth = (wireRadius + narrowClearance) * 2
-wireHole = cq.Workplane('XY') \
-    .box(wireHoleWidth, boxThickness, usbHoleBottomZ) \
-    .faces('<Z').edges('|Y').fillet(wireRadius) \
+sensorWireHoleWidth = (sensorWireRadius + narrowClearance) * 2
+sensorWireHole = cq.Workplane('XY') \
+    .box(sensorWireHoleWidth, boxThickness, usbHoleBottomZ) \
+    .faces('<Z').edges('|Y').fillet(sensorWireRadius) \
     .translate((proMicroHolderYInnerX - proMicroHolderThickness / 2 -
-                wireHoleWidth / 2,
+                sensorWireHoleWidth / 2,
                 boxInnerLength + boxThickness / 2,
                 usbHoleBottomZ / 2))
-body.cut(wireHole)
+body.cut(sensorWireHole)
 
 body = body.faces('<Z[4]').edges('not(|X or >X)').chamfer(0.6)
 
-wireFixPillow = cq.Workplane('XY').circle(wireFixPillowRadius) \
-    .extrude(wireFixPillowHeight)
+sensorWireFixPillow = cq.Workplane('XY').circle(sensorWireFixPillowRadius) \
+    .extrude(sensorWireFixPillowHeight)
 for i in range(0, 3):
-    body = body.union(wireFixPillow.translate((
-        wireFixPillowX,
-        boxInnerLength - wireFixPillowRadius -
-        (wireFixPillowRadius + wireRadius) * 2 * i,
+    body = body.union(sensorWireFixPillow.translate((
+        sensorWireFixPillowX,
+        boxInnerLength - sensorWireFixPillowRadius -
+        (sensorWireFixPillowRadius + sensorWireRadius) * 2 * i,
         0)))
 
 cover = cover.faces('<Y').edges('not(|X or |Y or |Z)') \
