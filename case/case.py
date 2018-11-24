@@ -24,6 +24,8 @@ proMicroHolderLowHeight = 4.0
 proMicroHolderCoverLength = 2.6
 relaysPcbToUsbClearance = 2.0
 sensorWireRadius = 3.0 / 2
+relayWireSpaceHeight = 1.5
+relayWireSpaceLength = 6.0
 mountingHoleHeight = 10.5
 mountingHoleRadius = 1.8 / 2
 mountSupporerThickness = 1.0
@@ -87,11 +89,14 @@ mountSupporterXWidth = boxInnerWidth - proMicroThickness - proMicroUSBHeight \
 mountSuporterX = cq.Workplane("XY").box(mountSupporterXWidth,
                                         mountSupporerThickness,
                                         mountingHoleHeight)
+relayWireSpace = cq.Workplane('XY').box(mountSupporterXWidth,
+                                        relayWireSpaceLength,
+                                        relayWireSpaceHeight)
 pcbCenterY = clearance + relaysPcbLength / 2
-body = body.union(mountSuporterX.translate((mountSupporterXWidth / 2,
-                                            pcbCenterY +
-                                            relaysPcbHolePositions[0][1],
-                                            mountingHoleHeight / 2)))
+body = body.union(mountSuporterX.translate((
+    mountSupporterXWidth / 2,
+    pcbCenterY + relaysPcbHolePositions[0][1],
+    mountingHoleHeight / 2)))
 hookHoleHeight = hookHeight + holeClearance * 2
 hookHole = cq.Workplane("XY") \
     .box(hookWidth + clearance * 2, boxThickness, hookHoleHeight)
@@ -150,6 +155,11 @@ for i in range(0, relaysPcbNumber):
             pcbCenterX + x,
             boxInnerLength + boxThickness,
             mountingHoleHeight - audioHoleCenterHeight)))
+body.cut(relayWireSpace.translate((
+    mountSupporterXWidth / 2,
+    pcbCenterY + relaysPcbHolePositions[0][1] - mountingHoleRadius -
+    mountSupporerThickness - relayWireSpaceLength / 2,
+    mountingHoleHeight - relayWireSpaceHeight / 2)))
 usbHoleWidth = proMicroUSBHeight + clearance * 2
 usbHoleHeight = proMicroUSBWidth + holeClearance * 2
 usbHoleBottomZ = (boxInnerHeight - usbHoleHeight) / 2
@@ -233,7 +243,7 @@ sensorWireHole = cq.Workplane('XY') \
                 usbHoleBottomZ / 2))
 body.cut(sensorWireHole)
 
-body = body.faces('<Z[4]').edges('not(|X or >X)').chamfer(0.6)
+body = body.faces('<Z[5]').edges('not(|X or >X)').chamfer(0.6)
 
 sensorWireFixPillow = cq.Workplane('XY').circle(sensorWireFixPillowRadius) \
     .extrude(sensorWireFixPillowHeight)
