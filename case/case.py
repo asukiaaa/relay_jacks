@@ -108,9 +108,10 @@ hookSupport = cq.Workplane('XY') \
 coverMountHoleBaseHeight = \
     coverMountHoleCenterHeight + coverHoleRadius + mountSupporerThickness
 coverMountHoleBase = cq.Workplane("XY") \
-    .box((coverMountHoleRadius + mountSupporerThickness) * 2,
+    .box((coverMountHoleRadius + mountSupporerThickness * 2) * 2,
          coverMountHoleBaseLength,
-         coverMountHoleBaseHeight)
+         coverMountHoleBaseHeight) \
+    .faces('>Z').edges('|Y').chamfer(mountSupporerThickness * 2)
 coverMountHole = cq.Workplane("XZ").circle(coverMountHoleRadius) \
     .extrude(coverMountHoleLength)
 coverHole = cq.Workplane('XZ').circle(coverHoleRadius) \
