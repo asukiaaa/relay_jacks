@@ -126,10 +126,19 @@ for i in range(0, relaysPcbNumber):
         body.cut(moutingHole.translate((pcbCenterX + x,
                                         pcbCenterY + y,
                                         - boxThickness)))
-        if (x > 0 and (i == 0 or i == relaysPcbNumber - 1)):
+        if (x > 0):
             body.cut(hookHole.translate((pcbCenterX + x,
                                          boxInnerLength + boxThickness / 2,
                                          hookHoleCenterZ)))
+            cover = cover.union(hookSupport.translate((
+                pcbCenterX + x,
+                boxInnerLength - clearance - hookConnectionLength / 2,
+                hookHoleCenterZ + hookHeight / 2)))
+            cover = cover.union(hook.translate((
+                pcbCenterX + x,
+                boxInnerLength + boxThickness - hookLength / 2,
+                hookHoleCenterZ)))
+        if (x > 0 and (i == 0 or i == relaysPcbNumber - 1)):
             body = body.union(coverMountHoleBase.translate((
                 pcbCenterX + x,
                 coverMountHoleBaseLength,
@@ -142,14 +151,6 @@ for i in range(0, relaysPcbNumber):
                 pcbCenterX + x,
                 - boxThickness,
                 coverMountHoleCenterHeight)))
-            cover = cover.union(hookSupport.translate((
-                pcbCenterX + x,
-                boxInnerLength - clearance - hookConnectionLength / 2,
-                hookHoleCenterZ + hookHeight / 2)))
-            cover = cover.union(hook.translate((
-                pcbCenterX + x,
-                boxInnerLength + boxThickness - hookLength / 2,
-                hookHoleCenterZ)))
     for x in relaysPcbAudioXPositions:
         body.cut(audioHole.translate((
             pcbCenterX + x,
