@@ -198,7 +198,7 @@ proMicroHolderAsOuterXCut = cq.Workplane('XY') \
 
 proMicroHolderYOuterX = boxInnerWidth - proMicroHolderThickness / 2
 proMicroHolderYInnerX = proMicroHolderYOuterX \
-    - narrowClearance * 2 - proMicroThickness - proMicroHolderThickness
+    - proMicroThickness - proMicroHolderThickness  # - narrowClearance * 2
 proMicroHolderYUpperY = boxInnerLength - proMicroHolderCoverLength / 2
 proMicroHolderYLowerY = \
     boxInnerLength - proMicroLength - narrowClearance * 2 + \
