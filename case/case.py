@@ -3,7 +3,6 @@ from Helpers import show
 
 clearance = 0.2
 narrowClearance = clearance / 2
-holeClearance = 0.5
 relaysPcbNumber = 3
 relaysPcbWidth = 32.0
 relaysPcbLength = 33.0
@@ -97,7 +96,7 @@ body = body.union(mountSuporterX.translate((
     mountSupporterXWidth / 2,
     pcbCenterY + relaysPcbHolePositions[0][1],
     mountingHoleHeight / 2)))
-hookHoleHeight = hookHeight + holeClearance * 2
+hookHoleHeight = hookHeight + clearance * 2
 hookHole = cq.Workplane("XY") \
     .box(hookWidth + clearance * 2, boxThickness, hookHoleHeight)
 hookHoleCenterZ = boxInnerHeight - hookHoleHeight / 2
@@ -166,7 +165,7 @@ body.cut(relayWireSpace.translate((
     mountSupporerThickness - relayWireSpaceLength / 2,
     mountingHoleHeight - relayWireSpaceHeight / 2)))
 usbHoleWidth = proMicroUSBHeight + clearance * 2
-usbHoleHeight = proMicroUSBWidth + holeClearance * 2
+usbHoleHeight = proMicroUSBWidth + clearance * 2
 usbHoleBottomZ = (boxInnerHeight - usbHoleHeight) / 2
 usbBodyHoleHeight = boxInnerHeight - usbHoleBottomZ + boxThickness
 usbHoleCenterX = boxInnerWidth - proMicroThickness - \
