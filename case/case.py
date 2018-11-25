@@ -178,26 +178,29 @@ body.cut(usbHole.translate((
     boxInnerLength + boxThickness / 2,
     usbHoleBottomZ + usbBodyHoleHeight / 2)))
 
+proMicroHolderHighHeight = boxInnerHeight - narrowClearance
 proMicroHolderLowY = cq.Workplane("XY").box(proMicroHolderThickness,
                                             proMicroHolderCoverLength,
                                             proMicroHolderLowHeight)
 proMicroHolderHighY = cq.Workplane("XY").box(proMicroHolderThickness,
                                              proMicroHolderCoverLength,
-                                             boxInnerHeight)
+                                             proMicroHolderHighHeight)
 proMicroHolderXWidth = \
     proMicroThickness + proMicroHolderThickness * 2 + clearance * 2
 proMicroHolderX = cq.Workplane("XY") \
-    .box(proMicroHolderXWidth, proMicroHolderThickness, boxInnerHeight)
+    .box(proMicroHolderXWidth,
+         proMicroHolderThickness,
+         proMicroHolderHighHeight)
 proMicroHolderXCut = cq.Workplane("XY") \
     .box(proMicroHolderXWidth + clearance * 2,
          proMicroHolderThickness + clearance * 2,
-         boxInnerHeight + clearance * 2)
+         boxInnerHeight)
 proMicroHolderAsOuterX = cq.Workplane('XY') \
-    .box(proMicroHolderXWidth, boxThickness, boxInnerHeight)
+    .box(proMicroHolderXWidth, boxThickness, proMicroHolderHighHeight)
 proMicroHolderAsOuterXCut = cq.Workplane('XY') \
     .box(proMicroHolderXWidth + clearance * 2,
          boxThickness,
-         boxInnerHeight + clearance * 2)
+         boxInnerHeight)
 
 proMicroHolderYOuterX = boxInnerWidth - proMicroHolderThickness / 2
 proMicroHolderYInnerX = proMicroHolderYOuterX \
@@ -214,20 +217,20 @@ body = body.union(proMicroHolderLowY.translate((
 body = body.union(proMicroHolderHighY.translate((
     proMicroHolderYOuterX,
     proMicroHolderYUpperY,
-    boxInnerHeight / 2)))
+    proMicroHolderHighHeight / 2)))
 body = body.union(proMicroHolderHighY.translate((
     proMicroHolderYInnerX,
     proMicroHolderYLowerY,
-    boxInnerHeight / 2)))
+    proMicroHolderHighHeight / 2)))
 body = body.union(proMicroHolderHighY.translate((
     proMicroHolderYOuterX,
     proMicroHolderYLowerY,
-    boxInnerHeight / 2)))
+    proMicroHolderHighHeight / 2)))
 holderXPosition = (
     boxInnerWidth - proMicroHolderXWidth / 2,
     boxInnerLength - proMicroLength - narrowClearance * 2 -
     proMicroHolderThickness / 2,
-    boxInnerHeight / 2)
+    proMicroHolderHighHeight / 2)
 holderAsOuterXPosition = (
     holderXPosition[0],
     - boxThickness / 2,
@@ -247,7 +250,7 @@ sensorWireHole = cq.Workplane('XY') \
                 usbHoleBottomZ / 2))
 body.cut(sensorWireHole)
 
-body = body.faces('<Z[6]').edges('not(|X or >X)').chamfer(0.6)
+body = body.faces('<Z[7]').edges('not(|X or >X)').chamfer(0.6)
 
 sensorWireFixPillow = cq.Workplane('XY').circle(sensorWireFixPillowRadius) \
     .extrude(sensorWireFixPillowHeight)
