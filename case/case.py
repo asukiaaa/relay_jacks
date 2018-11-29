@@ -28,6 +28,8 @@ mountingHoleRadius = 1.8 / 2
 mountSupporerThickness = 1.0
 relayWireSpaceHeight = mountingHoleHeight - 3.0
 relayWireSpaceLength = 2.0
+relaySideWireSpaceHeight = 2.0
+relaySideWireSpaceLength = 13.0
 hookWidth = 4.0
 hookHeight = 1.5
 hookConnectionLength = 1.5
@@ -91,6 +93,9 @@ mountSuporterX = cq.Workplane("XY").box(mountSupporterXWidth,
 relayWireSpace = cq.Workplane('XY').box(mountSupporterXWidth,
                                         relayWireSpaceLength,
                                         relayWireSpaceHeight)
+relaySideWireSpace = cq.Workplane('XY').box(mountSupporerThickness,
+                                            relaySideWireSpaceLength,
+                                            relayWireSpaceLength)
 pcbCenterY = clearance + relaysPcbLength / 2
 body = body.union(mountSuporterX.translate((
     mountSupporterXWidth / 2,
@@ -141,6 +146,12 @@ for i in range(0, relaysPcbNumber):
                 pcbCenterX + x,
                 boxInnerLength + boxThickness - hookLength / 2,
                 hookHoleCenterZ)))
+        if (x < 0):
+            body.cut(relaySideWireSpace.translate((
+                pcbCenterX + x,
+                pcbCenterY + y - relayWireSpaceLength - mountingHoleRadius -
+                mountSupporerThickness - relaySideWireSpaceLength / 2,
+                mountingHoleHeight - relaySideWireSpaceHeight / 2)))
         if (x > 0 and (i == 0 or i == relaysPcbNumber - 1)):
             body = body.union(coverMountHoleBase.translate((
                 pcbCenterX + x,
@@ -256,7 +267,7 @@ sensorWireHole = cq.Workplane('XY') \
                 usbHoleBottomZ / 2))
 body.cut(sensorWireHole)
 
-body = body.faces('<Z[8]').edges('not(|X or >X)').chamfer(0.6)
+body = body.faces('<Z[10]').edges('not(|X or >X)').chamfer(0.6)
 
 sensorWireFixPillow = cq.Workplane('XY').circle(sensorWireFixPillowRadius) \
     .extrude(sensorWireFixPillowHeight)
