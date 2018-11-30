@@ -2,6 +2,10 @@
 
 A KiCad pcb project for jacks controlled by relay.
 
+![boxes_and_wire](/docs/boxes_and_wire.jpg)
+![inside](/docs/inside.jpg)
+![outside](/docs/outside.jpg)
+
 # Components
 
 - [Relay](http://akizukidenshi.com/catalog/g/gP-01346/)
