@@ -6,6 +6,8 @@ A KiCad pcb project for jacks controlled by relay.
 ![inside](/docs/inside.jpg)
 ![outside](/docs/outside.jpg)
 
+[mpu9250-25mm-belt-holder](https://github.com/asukiaaa/mpu9250-25mm-belt-holder) is used for a sensor case.
+
 # Components
 
 - [Relay](http://akizukidenshi.com/catalog/g/gP-01346/)
