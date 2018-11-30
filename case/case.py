@@ -281,16 +281,16 @@ for i in range(0, 3):
 cover = cover.faces('<Y').edges('not(|X or |Y or |Z)') \
     .chamfer(boxThickness * 0.9)
 
-testZoneWidth = boxOuterWidth * 2 / 3
-testZoneLength = boxOuterLength
-testZoneHiehgt = boxOuterHeight
-testZone = cq.Workplane('XY') \
-    .box(testZoneWidth, testZoneLength, testZoneHiehgt) \
-    .translate((testZoneWidth / 2 - boxThickness,
-                boxInnerLength + boxThickness - testZoneLength / 2,
-                boxInnerHeight / 2))
-body.cut(testZone)
-cover.cut(testZone)
+# testZoneWidth = boxOuterWidth * 2 / 3
+# testZoneLength = boxOuterLength
+# testZoneHiehgt = boxOuterHeight
+# testZone = cq.Workplane('XY') \
+#     .box(testZoneWidth, testZoneLength, testZoneHiehgt) \
+#     .translate((testZoneWidth / 2 - boxThickness,
+#                 boxInnerLength + boxThickness - testZoneLength / 2,
+#                 boxInnerHeight / 2))
+# body.cut(testZone)
+# cover.cut(testZone)
 
 show(body)
 show(cover)
